@@ -12,6 +12,7 @@ import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import {
+  ApiBadRequestResponse,
   ApiBody,
   ApiCreatedResponse,
   ApiNotFoundResponse,
@@ -20,11 +21,15 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { User } from './entities/user.entity';
+import { RoleService } from 'src/role/role.service';
 
 @ApiTags('users')
 @Controller('users')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly roleService: RoleService,
+  ) {}
 
   @ApiOperation({
     summary: 'Создание пользователя',
@@ -34,10 +39,15 @@ export class UserController {
     description: 'Пользователь успешно создан.',
     type: User,
   })
+  @ApiBadRequestResponse({ description: 'Ошибка валидации' })
   @ApiBody({ type: CreateUserDto })
   @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto);
+  async create(@Body() createUserDto: CreateUserDto) {
+    const roles = await this.roleService.findAll();
+    if (roles.length !== createUserDto.roles.length) {
+      throw new HttpException('Указана неизвестная роль', 403);
+    }
+    return this.userService.create(Object.assign(createUserDto, { roles }));
   }
 
   @ApiOperation({

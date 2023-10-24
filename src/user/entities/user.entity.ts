@@ -1,8 +1,18 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Table, Column, Model, DataType, IsEmail } from 'sequelize-typescript';
+import {
+  Table,
+  Column,
+  Model,
+  DataType,
+  IsEmail,
+  BelongsToMany,
+} from 'sequelize-typescript';
+import { RoleUser } from 'src/role/entities/role-user.entity';
+import { Role } from 'src/role/entities/role.entity';
 
 @Table({
   tableName: 'users',
+  underscored: true,
 })
 export class User extends Model<User> {
   @ApiProperty({
@@ -43,4 +53,11 @@ export class User extends Model<User> {
     allowNull: false,
   })
   password: string;
+
+  @ApiProperty({
+    description: 'Роли пользователя',
+    type: [Role],
+  })
+  @BelongsToMany(() => Role, () => RoleUser)
+  roles: Role[];
 }

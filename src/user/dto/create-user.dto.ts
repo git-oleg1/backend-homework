@@ -1,5 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { MaxLength, MinLength } from 'class-validator';
+import {
+  ArrayNotEmpty,
+  IsArray,
+  IsDefined,
+  IsNotEmpty,
+  MaxLength,
+  MinLength,
+} from 'class-validator';
 
 export class CreateUserDto {
   @ApiProperty({
@@ -29,4 +36,16 @@ export class CreateUserDto {
   @MinLength(5)
   @MaxLength(15)
   password: string;
+
+  @ApiProperty({
+    description: 'Список ролей',
+    minLength: 3,
+    maxLength: 32,
+    type: [String],
+  })
+  @IsNotEmpty()
+  @IsDefined()
+  @IsArray()
+  @ArrayNotEmpty()
+  roles: string[];
 }

@@ -2,6 +2,8 @@ import { Sequelize } from 'sequelize-typescript';
 import { ConfigService } from '@nestjs/config';
 import { User } from 'src/user/entities/user.entity';
 import { SEQUELIZE } from 'src/constants';
+import { Role } from 'src/role/entities/role.entity';
+import { RoleUser } from 'src/role/entities/role-user.entity';
 
 export const databaseProviders = [
   {
@@ -16,7 +18,7 @@ export const databaseProviders = [
         password: configService.get<string>('DATABASE_PASSWORD'),
         database: configService.get<string>('DATABASE_NAME'),
       });
-      sequelize.addModels([User]);
+      sequelize.addModels([User, Role, RoleUser]);
       await sequelize.sync({ force: true });
       return sequelize;
     },

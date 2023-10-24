@@ -1,9 +1,9 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 import { USERS_REPOSITORY } from 'src/constants';
 import { WhereOptions } from 'sequelize';
+import { CreateUserModel } from './user.types';
 
 @Injectable()
 export class UserService {
@@ -12,8 +12,14 @@ export class UserService {
     private repository: typeof User,
   ) {}
 
-  create(createUserDto: CreateUserDto) {
-    return this.repository.create(createUserDto);
+  create(createUserDto: CreateUserModel) {
+    return this.repository.create(createUserDto, {
+      include: [
+        {
+          association: 'roles',
+        },
+      ],
+    });
   }
 
   findAll(): Promise<User[]> {
