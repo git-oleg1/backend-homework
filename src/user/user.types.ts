@@ -1,5 +1,3 @@
-import { Role } from 'src/role/entities/role.entity';
-
 export interface RequestCreateUser {
   name: string;
 
@@ -10,6 +8,4 @@ export interface RequestCreateUser {
   roles: string[];
 }
 
-export interface CreateUserModel extends Omit<RequestCreateUser, 'roles'> {
-  roles: Role[];
-}
+export interface CreateUserModel extends Omit<RequestCreateUser, 'roles'> {}

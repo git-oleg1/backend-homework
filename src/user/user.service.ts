@@ -13,13 +13,7 @@ export class UserService {
   ) {}
 
   create(createUserDto: CreateUserModel) {
-    return this.repository.create(createUserDto, {
-      include: [
-        {
-          association: 'roles',
-        },
-      ],
-    });
+    return this.repository.create(createUserDto);
   }
 
   findAll(): Promise<User[]> {

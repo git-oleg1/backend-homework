@@ -47,7 +47,12 @@ export class UserController {
     if (roles.length !== createUserDto.roles.length) {
       throw new HttpException('Указана неизвестная роль', 403);
     }
-    return this.userService.create(Object.assign(createUserDto, { roles }));
+    const user = await this.userService.create(createUserDto);
+    await user.$set(
+      'roles',
+      roles.map((role) => role.id),
+    );
+    return user;
   }
 
   @ApiOperation({
