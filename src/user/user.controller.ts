@@ -21,15 +21,11 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { User } from './entities/user.entity';
-import { RoleService } from 'src/role/role.service';
 
 @ApiTags('users')
 @Controller('users')
 export class UserController {
-  constructor(
-    private readonly userService: UserService,
-    private readonly roleService: RoleService,
-  ) {}
+  constructor(private readonly userService: UserService) {}
 
   @ApiOperation({
     summary: 'Создание пользователя',
@@ -43,16 +39,9 @@ export class UserController {
   @ApiBody({ type: CreateUserDto })
   @Post()
   async create(@Body() createUserDto: CreateUserDto) {
-    const roles = await this.roleService.findAll();
-    if (roles.length !== createUserDto.roles.length) {
-      throw new HttpException('Указана неизвестная роль', 403);
-    }
     const user = await this.userService.create(createUserDto);
-    await user.$set(
-      'roles',
-      roles.map((role) => role.id),
-    );
-    return user;
+
+    return this.userService.findByPk(user.id, ['roles']);
   }
 
   @ApiOperation({
