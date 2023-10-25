@@ -35,6 +35,7 @@ export class UserService {
         roles.map((role) => role.id),
         { transaction },
       );
+      user.roles = roles;
       return user;
     });
   }
@@ -53,6 +54,10 @@ export class UserService {
       where: options,
       include: associations,
     });
+  }
+
+  findByEmail(email: string, associations: string[] = []) {
+    return this.findOne({ email }, associations);
   }
 
   findByPk(id: number, associations: string[] = []): Promise<User | null> {

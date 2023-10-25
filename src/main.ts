@@ -8,6 +8,7 @@ import {
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { UserModule } from './user/user.module';
 import { RoleModule } from './role/role.module';
+import { AuthModule } from './auth/auth.module';
 
 function setupSwager(app: INestApplication) {
   const config = new DocumentBuilder()
@@ -18,7 +19,7 @@ function setupSwager(app: INestApplication) {
 
   const options: SwaggerDocumentOptions = {
     operationIdFactory: (controllerKey: string, methodKey: string) => methodKey,
-    include: [UserModule, RoleModule],
+    include: [UserModule, RoleModule, AuthModule],
   };
 
   const document = SwaggerModule.createDocument(app, config, options);
