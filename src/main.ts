@@ -1,11 +1,15 @@
-import { NestFactory } from '@nestjs/core';
+import { NestFactory, Reflector } from '@nestjs/core';
 import { AppModule } from './app.module';
 import {
   SwaggerModule,
   DocumentBuilder,
   SwaggerDocumentOptions,
 } from '@nestjs/swagger';
-import { INestApplication, ValidationPipe } from '@nestjs/common';
+import {
+  ClassSerializerInterceptor,
+  INestApplication,
+  ValidationPipe,
+} from '@nestjs/common';
 import { UserModule } from './user/user.module';
 import { RoleModule } from './role/role.module';
 import { AuthModule } from './auth/auth.module';
@@ -30,6 +34,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.setGlobalPrefix('api');
   app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
   setupSwager(app);
   await app.listen(3000);
 }

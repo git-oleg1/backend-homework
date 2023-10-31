@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Exclude } from 'class-transformer';
 import {
   Table,
   Column,
@@ -48,6 +49,7 @@ export class User extends Model<User> {
   })
   email: string;
 
+  @Exclude()
   @Column({
     type: DataType.STRING,
     allowNull: false,

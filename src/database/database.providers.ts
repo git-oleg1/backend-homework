@@ -19,7 +19,7 @@ export const databaseProviders = [
         database: configService.get<string>('DATABASE_NAME'),
       });
       sequelize.addModels([User, Role, RoleUser]);
-      await sequelize.sync({ force: true });
+      await sequelize.sync({ force: false });
       return sequelize;
     },
   },

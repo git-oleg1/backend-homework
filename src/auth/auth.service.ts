@@ -35,7 +35,7 @@ export class AuthService {
     const user = await this.usersService.create({
       ...registerDto,
       password,
-      roles: ['basic'],
+      roles: ['user'],
     });
 
     return this.generateToken(user);

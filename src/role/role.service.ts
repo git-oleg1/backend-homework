@@ -1,4 +1,9 @@
-import { Inject, Injectable } from '@nestjs/common';
+import {
+  Inject,
+  Injectable,
+  Logger,
+  OnApplicationBootstrap,
+} from '@nestjs/common';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { UpdateRoleDto } from './dto/update-role.dto';
 import { Role } from './entities/role.entity';
@@ -6,7 +11,9 @@ import { ROLES_REPOSITORY } from 'src/constants';
 import { WhereOptions } from 'sequelize';
 
 @Injectable()
-export class RoleService {
+export class RoleService implements OnApplicationBootstrap {
+  private logger: Logger = new Logger(RoleService.name);
+
   constructor(
     @Inject(ROLES_REPOSITORY)
     private repository: typeof Role,
@@ -41,5 +48,31 @@ export class RoleService {
   async remove(id: number) {
     const n = await this.repository.destroy({ where: { id } });
     return n === 1;
+  }
+
+  async onApplicationBootstrap() {
+    const hasAdmin = await this.findOne({
+      name: 'admin',
+    });
+
+    if (!hasAdmin) {
+      this.logger.warn('Initialize roles (admin)');
+      this.create({
+        name: 'admin',
+        description: 'Администратор',
+      });
+    }
+
+    const hasUser = await this.findOne({
+      name: 'user',
+    });
+
+    if (!hasUser) {
+      this.logger.warn('Initialize roles (user)');
+      this.create({
+        name: 'user',
+        description: 'Обычный пользователь',
+      });
+    }
   }
 }
