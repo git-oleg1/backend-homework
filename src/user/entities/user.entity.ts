@@ -7,7 +7,9 @@ import {
   DataType,
   IsEmail,
   BelongsToMany,
+  HasMany,
 } from 'sequelize-typescript';
+import { Qube } from 'src/qube/entities/qube.entity';
 import { RoleUser } from 'src/role/entities/role-user.entity';
 import { Role } from 'src/role/entities/role.entity';
 
@@ -62,4 +64,7 @@ export class User extends Model<User> {
   })
   @BelongsToMany(() => Role, () => RoleUser)
   roles: Role[];
+
+  @HasMany(() => Qube, 'user_id')
+  qubes: Qube[];
 }

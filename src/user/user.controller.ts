@@ -21,9 +21,11 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { User } from './entities/user.entity';
+import { Roles } from 'src/role/roles.decorator';
 
 @ApiTags('users')
 @Controller('users')
+@Roles('admin')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 

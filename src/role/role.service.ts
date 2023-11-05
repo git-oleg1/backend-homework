@@ -16,7 +16,7 @@ export class RoleService implements OnApplicationBootstrap {
 
   constructor(
     @Inject(ROLES_REPOSITORY)
-    private repository: typeof Role,
+    protected repository: typeof Role,
   ) {}
 
   create(createRoleDto: CreateRoleDto) {

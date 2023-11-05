@@ -20,8 +20,10 @@ import { RoleService } from './role.service';
 import { Role } from './entities/role.entity';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { UpdateRoleDto } from './dto/update-role.dto';
+import { Roles } from './roles.decorator';
 
 @ApiTags('roles')
+@Roles('admin')
 @Controller('roles')
 export class RoleController {
   constructor(private readonly roleService: RoleService) {}

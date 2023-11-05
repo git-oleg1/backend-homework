@@ -3,9 +3,11 @@ import { UserService } from './user.service';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { User } from './entities/user.entity';
 import { AuthUser } from 'src/auth/auth-user.decorator';
+import { Roles } from 'src/role/roles.decorator';
 
 @ApiTags('profile')
 @Controller('profile')
+@Roles('admin')
 export class ProfileController {
   constructor(private readonly userService: UserService) {}
 
